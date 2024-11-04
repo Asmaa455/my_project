@@ -52,9 +52,10 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show()
     {
-        //
+        $posts = Post::onlyTrashed()->get();
+        return view('posts.soft_delete',compact('posts'));
     }
 
     /**
@@ -102,5 +103,15 @@ class PostController extends Controller
     //هي تاني طريقة 
     Post::destroy($id);
     return redirect()->route('posts.index');   
+    }
+
+    public function restore($id){
+        Post::withTrashed()->where('id',$id)->restore();
+        return redirect()->back();
+    }
+
+    public function forcedelete($id){
+        Post::withTrashed()->where('id',$id)->forceDelete();
+        return redirect()->back();    
     }
 }
