@@ -74,7 +74,7 @@ class PostController extends Controller
     public function update(Request $request,$id)
     {
         $post = Post::findOrFail($id);
-        
+
         //هي أول طريقة
         /*$post->title=$request->title;
         $post->body=$request->body;
@@ -95,8 +95,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        //هي أول طريقة
+    //Post::findOrFail($id)->delete();
+    //هي تاني طريقة 
+    Post::destroy($id);
+    return redirect()->route('posts.index');   
     }
 }
