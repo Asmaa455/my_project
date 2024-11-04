@@ -12,7 +12,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+        //$posts = Post::get();
+        return view('posts.index',compact('posts'));
     }
 
     /**
@@ -20,7 +22,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -28,7 +30,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+      // هي أول طريقة : طريقة ال save
+        /*$post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->save();*/
+
+        //هي تاني طريقة : طريقة ال create
+
+        Post::create([
+            'title'=>$request->title,
+            'body'=>$request->body
+        ]);
+        /*Post::create(
+            $request->all()
+        );*/
+        return response('---تمت العملية بنجاح');
     }
 
     /**
@@ -42,17 +60,36 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        //
+        //$post= Post::findOrFail($id);
+        $post = Post::where('id',$id)->first();
+        return view('posts.edit',compact('post'));
+        //,compact('post')
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request,$id)
     {
-        //
+        $post = Post::findOrFail($id);
+        
+        //هي أول طريقة
+        /*$post->title=$request->title;
+        $post->body=$request->body;
+        $post->save();*/
+
+        //هي تاني طريقة
+        $post->update([
+        'title'=>$request->title,
+        'body'=>$request->body    
+        ]);
+
+        //هي طريقة ثالثة
+        //$post->update($request->all());
+
+        return redirect()->route('posts.index');
     }
 
     /**
